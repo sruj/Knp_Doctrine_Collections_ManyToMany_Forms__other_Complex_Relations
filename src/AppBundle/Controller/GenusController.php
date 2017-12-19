@@ -24,7 +24,7 @@ class GenusController extends Controller
             ->findAny();
 
         $genus = new Genus();
-        $genus->setName('Octopus'.rand(1, 10000));
+        $genus->setName('Octopus' . rand(1, 10000));
         $genus->setSubFamily($subFamily);
         $genus->setSpeciesCount(rand(100, 99999));
         $genus->setFirstDiscoveredAt(new \DateTime('50 years'));
@@ -42,7 +42,7 @@ class GenusController extends Controller
 
         return new Response(sprintf(
             '<html><body>Genus created! <a href="%s">%s</a></body></html>',
-            $this->generateUrl('genus_show', ['genusName' => $genus->getName()]),
+            $this->generateUrl('genus_show', ['slug' => $genus->getSlug()]),
             $genus->getName()
         ));
     }
@@ -63,14 +63,11 @@ class GenusController extends Controller
     }
 
     /**
-     * @Route("/genus/{genusName}", name="genus_show")
+     * @Route("/genus/{slug}", name="genus_show")
      */
-    public function showAction($genusName)
+    public function showAction(Genus $genus)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $genus = $em->getRepository('AppBundle:Genus')
-            ->findOneBy(['name' => $genusName]);
 
         if (!$genus) {
             throw $this->createNotFoundException('genus not found');
@@ -80,7 +77,7 @@ class GenusController extends Controller
         $funFact = $markdownTransformer->parse($genus->getFunFact());
 
         $this->get('logger')
-            ->info('Showing genus: '.$genusName);
+            ->info('Showing genus: ' . $genus->getName());
 
         $recentNotes = $em->getRepository('AppBundle:GenusNote')
             ->findAllRecentNotesForGenus($genus);
@@ -93,7 +90,7 @@ class GenusController extends Controller
     }
 
     /**
-     * @Route("/genus/{name}/notes", name="genus_show_notes")
+     * @Route("/genus/{slug}/notes", name="genus_show_notes")
      * @Method("GET")
      */
     public function getNotesAction(Genus $genus)
@@ -104,7 +101,7 @@ class GenusController extends Controller
             $notes[] = [
                 'id' => $note->getId(),
                 'username' => $note->getUsername(),
-                'avatarUri' => '/images/'.$note->getUserAvatarFilename(),
+                'avatarUri' => '/images/' . $note->getUserAvatarFilename(),
                 'note' => $note->getNote(),
                 'date' => $note->getCreatedAt()->format('M d, Y')
             ];
