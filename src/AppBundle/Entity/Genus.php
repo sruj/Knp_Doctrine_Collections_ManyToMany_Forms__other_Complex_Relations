@@ -34,6 +34,12 @@ class Genus
     private $subFamily;
 
     /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinTable(name="genus_scientists")
+     */
+    private $genusScientists;
+
+    /**
      * @Assert\NotBlank()
      * @Assert\Range(min=0, minMessage="Negative species! Come on...")
      * @ORM\Column(type="integer")
@@ -71,6 +77,8 @@ class Genus
     public function __construct()
     {
         $this->notes = new ArrayCollection();
+        $this->genusScientists = new ArrayCollection();
+
     }
 
     public function getId()
@@ -169,5 +177,7 @@ class Genus
     {
         $this->slug = $slug;
     }
+
+
 
 }
