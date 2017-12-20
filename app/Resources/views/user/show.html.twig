@@ -34,6 +34,17 @@
                     </tr>
                     </tbody>
                 </table>
+
+
+                <div>
+                    <dl>
+                        <dt>Scientist {{ user.email }} Genuses:</dt>
+                        {% for genus in user.genuses %}
+                            <dd>{{ genus.id }}</dd>
+                            <dd>{{ genus.name }}</dd>
+                        {% endfor %}
+                    </dl>
+                </div>
             </div>
         </div>
     </div>

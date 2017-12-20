@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -15,6 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -28,6 +30,12 @@ class User implements UserInterface
      * @ORM\Column(type="string", unique=true)
      */
     private $email;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Genus", mappedBy="genusScientists")
+     * @ORM\OrderBy({"name" = "ASC"})
+     */
+    private $genuses;
 
     /**
      * The encoded password
@@ -73,6 +81,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", nullable=true)
      */
     private $universityName;
+
+    public function __construct()
+    {
+        $this->genuses = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -199,4 +212,25 @@ class User implements UserInterface
     {
         return trim($this->getFirstName().' '.$this->getLastName());
     }
+
+    /**
+     * @param Genus
+     */
+    public function addScientistGenuses(Genus $genus)
+    {
+        if ($this->genuses->contains($genus)){
+            return;
+        }
+        $this->genuses[] = $genus;
+    }
+
+    /**
+     * @return ArrayCollection|Genus[]
+     */
+    public function getGenuses()
+    {
+        return $this->genuses;
+    }
+
+
 }
