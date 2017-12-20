@@ -2,11 +2,12 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\AppBundle;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
-
+use AppBundle\Entity\User as User;
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\GenusRepository")
  * @ORM\Table(name="genus")
@@ -176,6 +177,27 @@ class Genus
     public function setSlug($slug)
     {
         $this->slug = $slug;
+    }
+
+
+    /**
+     * @param User
+     */
+    public function addGenusScientist(User $genusScientists)
+    {
+        if ($this->genusScientists->contains($genusScientists)){
+            return;
+        }
+        $this->genusScientists[] = $genusScientists;
+    }
+
+    /**
+     * @return ArrayCollection|\AppBundle\Entity\User[]
+     */
+    public function getGenusScientists()
+    {
+        return $this->genusScientists;
+
     }
 
 

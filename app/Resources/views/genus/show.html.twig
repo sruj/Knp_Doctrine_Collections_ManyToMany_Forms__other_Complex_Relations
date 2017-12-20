@@ -17,6 +17,10 @@
                 <dd>{{ genus.funFact|markdownify }}</dd>
                 <dt>Recent Notes</dt>
                 <dd>{{ recentNoteCount }}</dd>
+                <dt>Genus Scientists:</dt>
+                {% for scient in genus.genusScientists %}
+                    <dd><a href="{{ path('user_show',{'id':scient.id}) }}">{{ scient.email }}</a> </dd>
+                {% endfor %}
             </dl>
         </div>
     </div>
@@ -34,8 +38,8 @@
         var notesUrl = '{{ path('genus_show_notes', {'slug': genus.slug}) }}';
 
         ReactDOM.render(
-          <NoteSection url={notesUrl} />,
-          document.getElementById('js-notes-wrapper')
+                <NoteSection url={notesUrl}/>,
+            document.getElementById('js-notes-wrapper')
         );
     </script>
 {% endblock %}

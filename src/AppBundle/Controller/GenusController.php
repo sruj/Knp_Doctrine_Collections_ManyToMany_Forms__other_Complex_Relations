@@ -4,7 +4,9 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Genus;
 use AppBundle\Entity\GenusNote;
+use AppBundle\Entity\User;
 use AppBundle\Service\MarkdownTransformer;
+use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,11 +25,21 @@ class GenusController extends Controller
         $subFamily = $em->getRepository('AppBundle:SubFamily')
             ->findAny();
 
+        $user1 = $em->getRepository('AppBundle:User')
+            ->findBy(['id'=>1]);
+        $user2 = $em->getRepository('AppBundle:User')
+            ->findOneBy(['id'=>2]);
+
+        $genus3 = $em->getRepository('AppBundle:Genus')
+            ->findOneBy(['id'=>12]);
+        $r=$genus3->getGenusScientists();
+
         $genus = new Genus();
         $genus->setName('Octopus' . rand(1, 10000));
         $genus->setSubFamily($subFamily);
         $genus->setSpeciesCount(rand(100, 99999));
         $genus->setFirstDiscoveredAt(new \DateTime('50 years'));
+        $genus->addGenusScientist($user2);
 
         $genusNote = new GenusNote();
         $genusNote->setUsername('AquaWeaver');
@@ -35,6 +47,8 @@ class GenusController extends Controller
         $genusNote->setNote('I counted 8 legs... as they wrapped around me');
         $genusNote->setCreatedAt(new \DateTime('-1 month'));
         $genusNote->setGenus($genus);
+
+
 
         $em->persist($genus);
         $em->persist($genusNote);
