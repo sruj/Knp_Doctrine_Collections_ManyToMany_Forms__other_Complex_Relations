@@ -234,5 +234,7 @@ class User implements UserInterface
         return $this->genuses;
     }
 
-
+    public function __toString() {
+        return $this->getFullName();
+    }
 }

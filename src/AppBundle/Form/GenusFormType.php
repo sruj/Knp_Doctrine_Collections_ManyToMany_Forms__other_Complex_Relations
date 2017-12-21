@@ -3,7 +3,10 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\SubFamily;
+use AppBundle\Entity\User;
+use AppBundle\Repository\GenusRepository;
 use AppBundle\Repository\SubFamilyRepository;
+use AppBundle\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -22,7 +25,7 @@ class GenusFormType extends AbstractType
             ->add('subFamily', EntityType::class, [
                 'placeholder' => 'Choose a Sub Family',
                 'class' => SubFamily::class,
-                'query_builder' => function(SubFamilyRepository $repo) {
+                'query_builder' => function (SubFamilyRepository $repo) {
                     return $repo->createAlphabeticalQueryBuilder();
                 }
             ])
@@ -41,7 +44,15 @@ class GenusFormType extends AbstractType
                 'attr' => ['class' => 'js-datepicker'],
                 'html5' => false,
             ])
-        ;
+            ->add('genusScientists', EntityType::class, [
+                'placeholder' => 'Choose',
+                'class' => User::class,
+                'multiple' => true,
+                'expanded' => true,
+                'query_builder' => function(UserRepository $repo) {
+                    return $repo->findAllScientists();
+                }
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
