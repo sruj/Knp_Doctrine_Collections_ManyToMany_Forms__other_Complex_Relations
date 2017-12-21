@@ -35,7 +35,7 @@ class Genus
     private $subFamily;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", inversedBy="genuses")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", inversedBy="genuses", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="genus_scientists")
      */
     private $genusScientists;
