@@ -214,6 +214,8 @@ class User implements UserInterface
     }
 
     /**
+     * to nie działa po inverse side
+     *
      * @param Genus
      */
     public function addScientistGenuses(Genus $genus)

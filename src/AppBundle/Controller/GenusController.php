@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class GenusController extends Controller
@@ -26,20 +27,18 @@ class GenusController extends Controller
             ->findAny();
 
         $user1 = $em->getRepository('AppBundle:User')
-            ->findBy(['id'=>1]);
-        $user2 = $em->getRepository('AppBundle:User')
             ->findOneBy(['id'=>2]);
 
-        $genus3 = $em->getRepository('AppBundle:Genus')
+        $genus1 = $em->getRepository('AppBundle:Genus')
             ->findOneBy(['id'=>12]);
-        $r=$genus3->getGenusScientists();
+        $r=$genus1->removeGenusScientist($user1);
 
         $genus = new Genus();
         $genus->setName('Octopus' . rand(1, 10000));
         $genus->setSubFamily($subFamily);
         $genus->setSpeciesCount(rand(100, 99999));
         $genus->setFirstDiscoveredAt(new \DateTime('50 years'));
-        $genus->addGenusScientist($user2);
+//        $genus->addGenusScientist($user2);
 
         $genusNote = new GenusNote();
         $genusNote->setUsername('AquaWeaver');
@@ -51,6 +50,7 @@ class GenusController extends Controller
 
 
         $em->persist($genus);
+        $em->persist($genus1);
         $em->persist($genusNote);
         $em->flush();
 
@@ -126,5 +126,28 @@ class GenusController extends Controller
         ];
 
         return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/genus_remove", name="remove_genus_scientists", options={"expose"=true})
+     */
+    public function removeScientAction(Request $request)
+    {
+        $id = $request->getQueryString();
+        $genusId = $request->get('genus_id');
+        $userId = $request->get('user_id');
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $em->getRepository('AppBundle:User')
+            ->findOneBy(['id'=>$userId]);
+        $genus = $em->getRepository('AppBundle:Genus')
+            ->findOneBy(['id'=>$genusId]);
+
+        $genus->removeGenusScientist($user);
+
+        $em->persist($genus);
+        $em->flush();
+
+        return new JsonResponse(true);
     }
 }

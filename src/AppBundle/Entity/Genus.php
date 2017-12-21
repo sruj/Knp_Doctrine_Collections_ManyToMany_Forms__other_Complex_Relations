@@ -79,7 +79,6 @@ class Genus
     {
         $this->notes = new ArrayCollection();
         $this->genusScientists = new ArrayCollection();
-
     }
 
     public function getId()
@@ -189,6 +188,18 @@ class Genus
             return;
         }
         $this->genusScientists[] = $genusScientists;
+    }
+
+    /**
+     * @param User
+     * @return bool
+     */
+    public function removeGenusScientist(User $genusScientists)
+    {
+        if ($this->genusScientists->contains($genusScientists)){
+            return $this->genusScientists->removeElement($genusScientists);
+        }
+        return false;
     }
 
     /**

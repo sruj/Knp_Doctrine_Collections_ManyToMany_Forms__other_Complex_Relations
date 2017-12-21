@@ -19,7 +19,13 @@
                 <dd>{{ recentNoteCount }}</dd>
                 <dt>Genus Scientists:</dt>
                 {% for scient in genus.genusScientists %}
-                    <dd><a href="{{ path('user_show',{'id':scient.id}) }}">{{ scient.email }}</a> </dd>
+                    <dd id="{{ scient.id }}">
+                        <a href="{{ path('user_show',{'id':scient.id}) }}">{{ scient.email }}</a>
+                        <div class="btn btn-default" id="remove"
+                             data-user_id="{{ scient.id }}"
+                             data-genus_id="{{ genus.id }}">
+                            remove</div>
+                    </dd>
                 {% endfor %}
             </dl>
         </div>
@@ -41,5 +47,21 @@
                 <NoteSection url={notesUrl}/>,
             document.getElementById('js-notes-wrapper')
         );
+    </script>
+    <script>
+        $("#remove").click(function () {
+            var url = Routing.generate('remove_genus_scientists');
+            var user_id = $(this).attr('data-user_id');
+            var genus_id = $(this).attr('data-genus_id');
+            var data = { user_id: user_id, genus_id: genus_id };
+            $.ajax({
+                url: url,
+                data: data
+            }).done(function () {
+                var del = "dd#"+user_id;
+               $( del ).remove();
+            });
+        });
+
     </script>
 {% endblock %}
