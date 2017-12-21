@@ -130,10 +130,10 @@ class GenusController extends Controller
 
     /**
      * @Route("/genus_remove", name="remove_genus_scientists", options={"expose"=true})
+     * @Method("DELETE")
      */
     public function removeScientAction(Request $request)
     {
-        $id = $request->getQueryString();
         $genusId = $request->get('genus_id');
         $userId = $request->get('user_id');
         $em = $this->getDoctrine()->getManager();

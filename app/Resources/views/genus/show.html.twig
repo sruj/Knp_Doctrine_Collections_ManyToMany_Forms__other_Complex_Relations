@@ -50,11 +50,13 @@
     </script>
     <script>
         $("#remove").click(function () {
+            event.preventDefault();
             var url = Routing.generate('remove_genus_scientists');
             var user_id = $(this).attr('data-user_id');
             var genus_id = $(this).attr('data-genus_id');
             var data = { user_id: user_id, genus_id: genus_id };
             $.ajax({
+                method: "DELETE",
                 url: url,
                 data: data
             }).done(function () {
