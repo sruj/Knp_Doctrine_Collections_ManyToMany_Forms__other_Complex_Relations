@@ -28,7 +28,7 @@ class UserScientistForm extends AbstractType
                 'class' => Genus::class,
                 'multiple' => true,
                 'expanded' => true,
-//                'by_reference' => false,
+                'by_reference' => false,
             ]);
         ;
     }

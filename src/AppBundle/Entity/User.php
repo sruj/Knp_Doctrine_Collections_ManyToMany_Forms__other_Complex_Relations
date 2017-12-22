@@ -219,14 +219,14 @@ class User implements UserInterface
             return;
         }
         $this->studiedGenuses[] = $genus;
-//        $genus->addGenusScientist($this);
+        $genus->addGenusScientist($this);
     }
 
     public function removeStudiedGenus(Genus $genus)
     {
         if ($this->studiedGenuses->contains($genus)) {
             $this->studiedGenuses->removeElement($genus);
-//            $genus->removeGenusScientist($this);
+            $genus->removeGenusScientist($this);
         }
         return;
     }
