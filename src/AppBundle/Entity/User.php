@@ -35,7 +35,7 @@ class User implements UserInterface
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Genus", mappedBy="genusScientists")
      * @ORM\OrderBy({"name" = "ASC"})
      */
-    private $genuses;
+    private $studiedGenuses;
 
     /**
      * The encoded password
@@ -84,7 +84,7 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->genuses = new ArrayCollection();
+        $this->studiedGenuses = new ArrayCollection();
     }
 
     public function getId()
@@ -210,31 +210,37 @@ class User implements UserInterface
 
     public function getFullName()
     {
-        return trim($this->getFirstName().' '.$this->getLastName());
+        return trim($this->getFirstName() . ' ' . $this->getLastName());
     }
 
-    /**
-     * to nie działa po inverse side
-     *
-     * @param Genus
-     */
-    public function addScientistGenuses(Genus $genus)
+    public function addStudiedGenus(Genus $genus)
     {
-        if ($this->genuses->contains($genus)){
+        if ($this->studiedGenuses->contains($genus)) {
             return;
         }
-        $this->genuses[] = $genus;
+        $this->studiedGenuses[] = $genus;
+//        $genus->addGenusScientist($this);
+    }
+
+    public function removeStudiedGenus(Genus $genus)
+    {
+        if ($this->studiedGenuses->contains($genus)) {
+            $this->studiedGenuses->removeElement($genus);
+//            $genus->removeGenusScientist($this);
+        }
+        return;
     }
 
     /**
      * @return ArrayCollection|Genus[]
      */
-    public function getGenuses()
+    public function getStudiedGenuses()
     {
-        return $this->genuses;
+        return $this->studiedGenuses;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getFullName();
     }
 }

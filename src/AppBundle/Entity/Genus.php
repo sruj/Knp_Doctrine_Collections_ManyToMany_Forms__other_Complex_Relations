@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use AppBundle\Entity\User as User;
+
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\GenusRepository")
  * @ORM\Table(name="genus")
@@ -35,7 +36,7 @@ class Genus
     private $subFamily;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", inversedBy="genuses", fetch="EXTRA_LAZY")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\User", inversedBy="studiedGenuses", fetch="EXTRA_LAZY")
      * @ORM\JoinTable(name="genus_scientists")
      */
     private $genusScientists;
@@ -131,7 +132,7 @@ class Genus
 
     public function getUpdatedAt()
     {
-        return new \DateTime('-'.rand(0, 100).' days');
+        return new \DateTime('-' . rand(0, 100) . ' days');
     }
 
     public function setIsPublished($isPublished)
@@ -184,7 +185,7 @@ class Genus
      */
     public function addGenusScientist(User $genusScientists)
     {
-        if ($this->genusScientists->contains($genusScientists)){
+        if ($this->genusScientists->contains($genusScientists)) {
             return;
         }
         $this->genusScientists[] = $genusScientists;
@@ -196,7 +197,7 @@ class Genus
      */
     public function removeGenusScientist(User $genusScientists)
     {
-        if ($this->genusScientists->contains($genusScientists)){
+        if ($this->genusScientists->contains($genusScientists)) {
             return $this->genusScientists->removeElement($genusScientists);
         }
         return false;
@@ -210,6 +211,9 @@ class Genus
         return $this->genusScientists;
     }
 
-
+    function __toString()
+    {
+        return $this->getSlug();
+    }
 
 }

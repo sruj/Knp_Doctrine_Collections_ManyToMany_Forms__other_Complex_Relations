@@ -39,7 +39,7 @@
                 <div>
                     <dl>
                         <dt>Scientist {{ user.email }} Genuses:</dt>
-                        {% for genus in user.genuses %}
+                        {% for genus in user.studiedGenuses %}
                             <dd>{{ genus.id }}</dd>
                             <dd>{{ genus.name }}</dd>
                         {% endfor %}

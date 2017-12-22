@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserEditForm;
 use AppBundle\Form\UserRegistrationForm;
+use AppBundle\Form\UserScientistForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,11 +58,24 @@ class UserController extends Controller
      */
     public function editAction(User $user, Request $request)
     {
-        $form = $this->createForm(UserEditForm::class, $user);
+        $form = $this->createForm(UserScientistForm::class, $user);
+        $em = $this->getDoctrine()->getManager();
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $formData = $form->getNormData();
+            $genuses = $formData->getStudiedGenuses();
+            $genusesAll = $this->getDoctrine()
+                ->getRepository('AppBundle:Genus')
+                ->findAll();
+            foreach ($genusesAll as $genus){
+                if(!$genuses->contains($genus)){
+                    $genus->removeGenusScientist($user);
+                }else {
+                    $genus->addGenusScientist($user);
+                }
+                $em->persist($genus);
+            }
             $em->persist($user);
             $em->flush();
 
@@ -75,6 +89,5 @@ class UserController extends Controller
         return $this->render('user/edit.html.twig', [
             'userForm' => $form->createView()
         ]);
-
     }
 }
