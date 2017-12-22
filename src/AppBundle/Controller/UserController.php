@@ -63,19 +63,6 @@ class UserController extends Controller
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-//            $formData = $form->getNormData();
-//            $genuses = $formData->getStudiedGenuses();
-//            $genusesAll = $this->getDoctrine()
-//                ->getRepository('AppBundle:Genus')
-//                ->findAll();
-//            foreach ($genusesAll as $genus){
-//                if(!$genuses->contains($genus)){
-//                    $genus->removeGenusScientist($user);
-//                }else {
-//                    $genus->addGenusScientist($user);
-//                }
-//                $em->persist($genus);
-//            }
             $em->persist($user);
             $em->flush();
 
