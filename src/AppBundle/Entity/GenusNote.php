@@ -43,11 +43,6 @@ class GenusNote
      */
     private $genus;
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getUsername()
     {
         return $this->username;
@@ -96,5 +91,10 @@ class GenusNote
     public function setGenus(Genus $genus)
     {
         $this->genus = $genus;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 }

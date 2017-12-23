@@ -17,16 +17,32 @@
                 <dd>{{ genus.funFact|markdownify }}</dd>
                 <dt>Recent Notes</dt>
                 <dd>{{ recentNoteCount }}</dd>
-                <dt>Genus Scientists:</dt>
-                {% for scient in genus.genusScientists %}
-                    <dd id="{{ scient.id }}">
-                        <a href="{{ path('user_show',{'id':scient.id}) }}">{{ scient.email }}</a>
-                        <div class="btn btn-default" id="remove"
-                             data-user_id="{{ scient.id }}"
-                             data-genus_id="{{ genus.id }}">
-                            remove</div>
-                    </dd>
-                {% endfor %}
+
+                <dt>Lead Scientists</dt>
+                <dd>
+                    <ul class="list-group">
+                        {% for genusScientist in genus.genusScientists %}
+                            <li class="list-group-item js-scientist-item">
+                                <a href="{{ path('user_show', {
+                                    'id': genusScientist.user.id
+                                }) }}">
+                                    {{ genusScientist.user.fullName }}
+                                    ({{ genusScientist.yearsStudied }} years)
+                                </a>
+
+                                <a href="#"
+                                   class="btn btn-link btn-xs pull-right js-remove-scientist-user"
+                                   data-url="{{ path('genus_scientists_remove', {
+                                       genusId: genus.id,
+                                       userId: genusScientist.user.id
+                                   }) }}"
+                                >
+                                    <span class="fa fa-close"></span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </dd>
             </dl>
         </div>
     </div>
@@ -44,26 +60,33 @@
         var notesUrl = '{{ path('genus_show_notes', {'slug': genus.slug}) }}';
 
         ReactDOM.render(
-                <NoteSection url={notesUrl}/>,
+                <NoteSection url={notesUrl} />,
             document.getElementById('js-notes-wrapper')
         );
     </script>
+
     <script>
-        $("#remove").click(function () {
-            event.preventDefault();
-            var url = Routing.generate('remove_genus_scientists');
-            var user_id = $(this).attr('data-user_id');
-            var genus_id = $(this).attr('data-genus_id');
-            var data = { user_id: user_id, genus_id: genus_id };
-            $.ajax({
-                method: "DELETE",
-                url: url,
-                data: data
-            }).done(function () {
-                var del = "dd#"+user_id;
-               $( del ).remove();
+        jQuery(document).ready(function() {
+            $('.js-remove-scientist-user').on('click', function(e) {
+                e.preventDefault();
+
+                var $el = $(this).closest('.js-scientist-item');
+
+                $(this).find('.fa-close')
+                    .removeClass('fa-close')
+                    .addClass('fa-spinner')
+                    .addClass('fa-spin');
+
+                $.ajax({
+                    url: $(this).data('url'),
+                    method: 'DELETE'
+                }).done(function() {
+                    $el.fadeOut();
+                });
+
+                e.preventDefault();
             });
         });
-
     </script>
 {% endblock %}
+

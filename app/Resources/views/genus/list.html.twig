@@ -15,14 +15,15 @@
             <tr>
                 <td>
                     <a href="{{ path('genus_show', {'slug': genus.slug}) }}">
-                        {{ genus.slug }}
+                        {{ genus.name }}
                     </a>
                 </td>
                 <td>{{ genus.speciesCount }}</td>
-                <td>{{ genus.genusScientists|length  }}</td>
+                <td>{{ genus.genusScientists|length }}</td>
                 <td>{{ genus.updatedAt|date('Y-m-d') }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 {% endblock %}
+

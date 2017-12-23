@@ -17,9 +17,8 @@ class GenusRepository extends EntityRepository
             ->setParameter('isPublished', true)
             ->leftJoin('genus.notes', 'genus_note')
             ->orderBy('genus_note.createdAt', 'DESC')
-            //JOIN bez LAZY, - wszystkie dane dostępne w kontrolerze na dzień dobry
-//            ->leftJoin('genus.genusScientists', 'genus_scientists')
-//            ->addSelect('genus_scientists')
+            ->leftJoin('genus.genusScientists', 'genusScientist')
+            ->addSelect('genusScientist')
             ->getQuery()
             ->execute();
     }
