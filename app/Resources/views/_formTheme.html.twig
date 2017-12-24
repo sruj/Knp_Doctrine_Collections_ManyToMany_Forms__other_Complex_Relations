@@ -29,3 +29,11 @@
         <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
     {% endif %}
 {%- endblock form_widget_simple %}
+
+{% block app_bundle_genus_scientist_embedded_form_row -%}
+    <div class="form-group{% if (not compound or force_error|default(false)) and not valid %} has-error{% endif %} col-xs-4">
+        {{- form_label(form) -}}
+        {{- form_widget(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock  %}
