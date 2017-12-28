@@ -5,9 +5,21 @@
         <div class="row">
             <div class="col-xs-12">
                 <h1>Edit Genus</h1>
-
                 {{ include('admin/genus/_form.html.twig') }}
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var remover = $('a.js-remove-scientist');
+
+        jQuery(document).ready(function () {
+            remover.click(function () {
+                $(this).parent().remove()
+            });
+        });
+    </script>
 {% endblock %}

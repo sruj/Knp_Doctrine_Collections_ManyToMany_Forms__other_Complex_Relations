@@ -19,7 +19,20 @@
     }) }}
 
     {{ form_row(genusForm.firstDiscoveredAt) }}
-    {{ form_row(genusForm.genusScientists) }}
+
+<h3>Scientists:</h3>
+<div class="row" id="genus_form_genusScientists">
+    {% for scientist in genusForm.genusScientists %}
+        <div class="col-xs-4 genus_form_item">
+            <a href="#" class="js-remove-scientist pull-right">
+                <span class="fa fa-close"></span>
+            </a>
+            {{ form_row(scientist.user) }}
+            {{ form_row(scientist.yearsStudied) }}
+        </div>
+    {% endfor %}
+</div>
+
 
 <button type="submit" class="btn btn-primary" formnovalidate>Save</button>
 {{ form_end(genusForm) }}

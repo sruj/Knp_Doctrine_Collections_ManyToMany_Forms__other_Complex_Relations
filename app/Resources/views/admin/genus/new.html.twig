@@ -11,3 +11,60 @@
         </div>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        var $collectionHolder;
+        var $addTagLink = $('<button class="add_scientists_link btn btn-primary">Add New Genus </button>');
+        var $newLinkLi = $('<div></div>').append($addTagLink);
+
+        jQuery(document).ready(function () {
+            $collectionHolder = $('div#genus_form_genusScientists');
+            $collectionHolder.append($newLinkLi);
+            // count the current form inputs
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addTagLink.on('click', function (e) {
+                e.preventDefault();
+                addScientistForm($collectionHolder, $newLinkLi);
+            });
+
+            $('a.js-remove-scientist').on('click', function (e) {
+                e.preventDefault();
+                $(this).closest().remove();
+            });
+
+        });
+
+        function addScientistForm($collectionHolder, $newLinkLi) {
+            var prototype = $collectionHolder.data('prototype');
+            var index = $collectionHolder.data('index');
+            var newForm = prototype;
+
+            $collectionHolder.data('index', index + 1);
+
+            var $newFormLi = $('<div></div>').append(newForm);
+
+            // also add a remove button, just for this example
+            $newFormLi.append('<a href="#" class="remove-tag">x</a>');
+
+            $newLinkLi.before($newFormLi);
+        }
+
+
+    </script>
+
+    {#<script>#}
+    {#var wrapper = $('#genus_form_genusScientists');#}
+    {#var remover = $('a.js-remove-scientist');#}
+    {#jQuery(document).ready(function () {#}
+    {#remover.click(function () {#}
+    {#$(this).parent().remove()#}
+    {#})#}
+    {#});#}
+
+
+    {#</script>#}
+{% endblock %}

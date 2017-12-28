@@ -2,8 +2,10 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\GenusScientist;
 use AppBundle\Entity\SubFamily;
 use AppBundle\Entity\User;
+use AppBundle\Repository\GenusRepository;
 use AppBundle\Repository\SubFamilyRepository;
 use AppBundle\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -46,7 +48,8 @@ class GenusFormType extends AbstractType
             ])
             ->add('genusScientists', CollectionType::class, array(
                 'entry_type' => GenusScientistEmbeddedForm::class,
-                'entry_options' => array('label' => false),
+                'by_reference' => false,
+                'allow_delete' => true,
             ))
         ;
     }
