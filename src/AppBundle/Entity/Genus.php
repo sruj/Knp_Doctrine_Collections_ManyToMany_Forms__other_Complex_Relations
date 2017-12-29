@@ -75,7 +75,10 @@ class Genus
      *     mappedBy="genus",
      *     fetch="EXTRA_LAZY",
      *     orphanRemoval=true,
+     *     cascade={"persist"}
      * )
+     * @Assert\Valid()
+     *
      */
     private $genusScientists;
 
@@ -176,19 +179,15 @@ class Genus
         $this->slug = $slug;
     }
 
-    public function addGenusScientist(User $user)
+    public function addGenusScientist(GenusScientist $genusScientist)
     {
-        if ($user instanceof GenusScientist){
-            $user = $user->getUser();
-        }
-
-        if ($this->genusScientists->contains($user)) {
+        if ($this->genusScientists->contains($genusScientist)) {
             return;
         }
 
-        $this->genusScientists[] = $user;
+        $this->genusScientists[] = $genusScientist;
         // not needed for persistence, just keeping both sides in sync
-        $user->addStudiedGenus($this);
+        $genusScientist->setGenus($this);
     }
 
     public function removeGenusScientist(GenusScientist $genusScientist)

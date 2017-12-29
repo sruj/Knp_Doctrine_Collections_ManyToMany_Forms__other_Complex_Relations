@@ -21,7 +21,8 @@
     {{ form_row(genusForm.firstDiscoveredAt) }}
 
 <h3>Scientists:</h3>
-<div class="row" id="genus_form_genusScientists">
+<div class="row" id="genus_form_genusScientists"
+     data-prototype="{{ form_widget(genusForm.genusScientists.vars.prototype)|e('html_attr') }}">
     {% for scientist in genusForm.genusScientists %}
         <div class="col-xs-4 genus_form_item">
             <a href="#" class="js-remove-scientist pull-right">
@@ -31,6 +32,10 @@
             {{ form_row(scientist.yearsStudied) }}
         </div>
     {% endfor %}
+    <a href="#" class="js-genus-scientist-add">
+        <span class="fa fa-plus-circle"></span>
+        Add Another Scientist
+    </a>
 </div>
 
 

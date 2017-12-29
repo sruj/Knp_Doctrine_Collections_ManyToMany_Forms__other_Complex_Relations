@@ -16,10 +16,45 @@
     <script>
         var remover = $('a.js-remove-scientist');
 
+        var $collectionHolder;
+
         jQuery(document).ready(function () {
             remover.click(function () {
                 $(this).parent().remove()
             });
+
+            $collectionHolder = $('div#genus_form_genusScientists');
+            // count the current form inputs
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $('.js-genus-scientist-add').on('click', function (e) {
+                e.preventDefault();
+                addScientistForm($collectionHolder);
+            });
+
         });
+
+        function addScientistForm($collectionHolder) {
+            var prototype = $collectionHolder.data('prototype');
+            var index = $collectionHolder.data('index');
+            var newForm = prototype;
+
+            $collectionHolder.data('index', index + 1);
+
+            var $newFormLi = $('<div class="col-xs-4 genus_form_item"></div>').append(newForm);
+
+            // also add a remove button, just for this example
+            $newFormLi.prepend('<a href="#" class="js-remove-scientist pull-right"><span class="fa fa-close"></span></a>');
+
+            $('.js-genus-scientist-add').before($newFormLi);
+
+            var remover = $('a.js-remove-scientist');
+            remover.click(function () {
+                $(this).parent().remove()
+            });
+        }
+
     </script>
+
+
 {% endblock %}
