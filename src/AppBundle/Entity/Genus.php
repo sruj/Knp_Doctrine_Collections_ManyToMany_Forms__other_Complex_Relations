@@ -208,4 +208,14 @@ class Genus
     {
         return $this->genusScientists;
     }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection|GenusScientist[]
+     */
+    public function getExpertScientists()
+    {
+        return $this->getGenusScientists()->filter(function(GenusScientist $genusScientist) {
+            return $genusScientist->getYearsStudied() > 20;
+        });
+    }
 }
